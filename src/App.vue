@@ -1,5 +1,11 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { defineAsyncComponent } from 'vue'
+
+const AppLayout = defineAsyncComponent(() => import('@/layouts/AppLayout.vue'))
+</script>
 
 <template>
-  <RouterView />
+  <AppLayout>
+    <RouterView />
+  </AppLayout>
 </template>

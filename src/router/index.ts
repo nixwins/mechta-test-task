@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../pages/HomePage.vue'
+import HomePage from '../pages/HomePage.vue'
+import { loadLayoutMiddleware } from './middlewares/loadLayout.middleware'
+import { defineAsyncComponent } from 'vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,9 +9,17 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: HomePage,
+      children: [
+        {
+          path: 'delivery/city/:id',
+          name: 'deliveryCostPage',
+          component: defineAsyncComponent(() => import('@/pages/DeliveryCostPage.vue'))
+        }
+      ]
     }
   ]
 })
 
+router.beforeEach(loadLayoutMiddleware)
 export default router
