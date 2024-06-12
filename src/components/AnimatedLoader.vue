@@ -1,6 +1,6 @@
 <template>
   <div class="animated-loader">
-    <svg viewBox="0 0 1320 300">
+    <svg viewBox="0 0 300 300">
       <text x="50%" y="50%" dy=".35em" text-anchor="middle">FastService</text>
     </svg>
   </div>
@@ -8,18 +8,23 @@
 
 <style lang="scss">
 .animated-loader {
+  // width: 100vw;
+  height: 100vh;
+  // overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 50%;
   svg {
     font-family: 'Russo One', sans-serif;
-    position: absolute;
-    width: 100%;
-    height: 100%;
+    align-self: center;
   }
   svg text {
     text-transform: uppercase;
     animation: stroke 1.5s infinite alternate;
     stroke-width: 2;
     stroke: #365fa0;
-    font-size: 140px;
+    font-size: 40px;
   }
 }
 

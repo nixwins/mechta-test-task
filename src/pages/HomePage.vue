@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { defineAsyncComponent, ref, watch } from 'vue'
 import type { City } from '@/types'
-import { useCityQuery } from '@/composables'
+import { useDeliveryQuery } from '@/composables'
 import { useRoute, useRouter } from 'vue-router'
 
 const TheHeader = defineAsyncComponent(() => import('@/components/TheHeader.vue'))
 const PopularCities = defineAsyncComponent(() => import('@/components/PopularCities.vue'))
 const AutoComplete = defineAsyncComponent(() => import('@/components/base/AutoComplete.vue'))
 
-const { getPopularCities, mockSearchCityByName } = useCityQuery()
+const { getPopularCities, mockSearchCityByName } = useDeliveryQuery()
 const { data: popularCities } = await getPopularCities()
 const seletedCityId = ref<number | null>()
 
@@ -35,14 +35,13 @@ watch(
       seletedCityId.value = parseInt(id as string)
       return
     }
-    seletedCityId.value = ''
+    seletedCityId.value = null
   },
   { deep: true, immediate: true }
 )
 
 const router = useRouter()
 const goToDeliveryCostPage = ({ id }: { id: number }) => {
-  debugger
   router.push({ name: 'deliveryCostPage', params: { id } })
 }
 </script>
@@ -57,6 +56,7 @@ const goToDeliveryCostPage = ({ id }: { id: number }) => {
 
         <AutoComplete
           class="home-page__city-search"
+          placeholder="Enter name of the city"
           :suggestions="cities"
           @search="searchCity"
           @complate="goToDeliveryCostPage"
@@ -85,6 +85,16 @@ const goToDeliveryCostPage = ({ id }: { id: number }) => {
   width: 100%;
   display: flex;
 
+  &__main {
+    @media screen and (max-width: 1060px) {
+      width: 100%;
+    }
+  }
+
+  @media screen and (max-width: 1060px) {
+    flex-direction: column;
+    padding-left: 0;
+  }
   &__title {
     font-size: 48px;
     font-weight: bold;
@@ -93,12 +103,24 @@ const goToDeliveryCostPage = ({ id }: { id: number }) => {
 
   &__subtitle {
     color: var(--secondy-color);
+    margin-bottom: 80px;
   }
 
   &__left-block {
+    @media screen and (max-width: 1380px) {
+      padding-left: 20px;
+    }
+
     padding: 20px 0 0 0;
     width: 100%;
     max-width: 670px;
+    @media screen and (max-width: 1060px) {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 100%;
+      margin: 0 auto;
+    }
   }
 
   &__right-block {
@@ -108,8 +130,15 @@ const goToDeliveryCostPage = ({ id }: { id: number }) => {
     display: flex;
     justify-content: center;
     flex-grow: 1;
-    height: 100vh;
     background-color: #f7f7f7;
+    padding: 32px 0;
+    @media screen and (max-width: 1060px) {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 40px;
+      padding-left: 0;
+    }
   }
 
   &__city-search {
@@ -120,6 +149,13 @@ const goToDeliveryCostPage = ({ id }: { id: number }) => {
 .delivery-cost {
   width: 100%;
   max-width: var(--left-block-width);
+  @media screen and (max-width: 1060px) {
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 16px;
+  }
 }
 
 .result-placeholder {

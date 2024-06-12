@@ -1,1 +1,1 @@
-export { useCityQuery } from './useCityQuery'
+export { useDeliveryQuery } from './useDeliveryQuery'

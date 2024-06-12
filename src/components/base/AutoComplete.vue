@@ -41,7 +41,7 @@ const suggestionsListOpened = computed(
   () => term.value && !isSearchResultEmpty.value && showSuggestinsList.value
 )
 
-const selectedItem = ref<Item>()
+const selectedItem = ref<Item | null>()
 const selectItem = (item: Item) => {
   selectedItem.value = item
   term.value = item.name
@@ -51,6 +51,12 @@ const selectItem = (item: Item) => {
 const complate = () => {
   emit('complate', selectedItem.value)
 }
+
+const clear = () => {
+  term.value = ''
+  selectedItem.value = null
+  search()
+}
 </script>
 
 <template>
@@ -59,11 +65,20 @@ const complate = () => {
     :class="{ 'dropdown-opened': suggestionsListOpened, invalid: hasError }"
   >
     <div class="input-group">
-      <input v-model="term" type="text" @input="search" />
-      <button v-if="!isSearchResultEmpty" class="auto-complate__btn-enter" @click="complate">
+      <input v-model="term" type="text" @input="search" v-bind="$attrs" />
+      <button
+        v-if="!isSearchResultEmpty && !selectedItem"
+        class="auto-complate__btn-enter"
+        @click="complate"
+      >
         Enter
       </button>
-      <button v-else class="auto-complate__btn-clear">
+      <button
+        v-else
+        class="auto-complate__btn-clear"
+        :class="{ 'btn-clear': selectedItem }"
+        @click="clear"
+      >
         <svg
           width="17"
           height="17"
@@ -128,15 +143,25 @@ const complate = () => {
     padding: 16px 48px;
     font-size: 24px;
     font-weight: bold;
+    @media screen and (max-width: 1060px) {
+      font-size: 16px;
+    }
     &:hover {
       color: var(--main-text-color);
     }
   }
-  &__btn-clear {
+  &__btn-clear,
+  .circle-button {
     border-radius: 50%;
     width: 65px;
     height: 65px;
     background: linear-gradient(139deg, #ff4757, #ffffff);
+    top: initial;
+    transform: translateY(0);
+  }
+
+  .btn-clear {
+    background: linear-gradient(45deg, #65b3e4, #78a1bb);
   }
 }
 .input-group {
@@ -149,11 +174,19 @@ const complate = () => {
     border-radius: 32px;
     border: 1px solid #e9f0eb;
     min-height: 63px;
+    font-size: 24px;
+    @media screen and (max-width: 1060px) {
+      font-size: 16px;
+      min-height: initial;
+    }
 
     &::placeholder {
       font-family: 'Roboto';
       color: #d9e4dc;
       font-size: 24px;
+      @media screen and (max-width: 1060px) {
+        font-size: 16px;
+      }
     }
 
     &:focus {

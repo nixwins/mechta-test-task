@@ -3,7 +3,7 @@ import { useHttpClient } from '@/composables'
 import type { City } from '@/types'
 import type { ResponseSchema } from '@/types/ResponseSchema.type'
 
-export function useCityQuery() {
+export function useDeliveryQuery() {
   async function searchCityByName(search: string): Promise<ResponseSchema<City[]>> {
     const { data, status } = await useHttpClient({ url: '/delivery/check', params: { search } })
 
@@ -38,9 +38,23 @@ export function useCityQuery() {
     })
   }
 
+  async function getDeliveryCostByCityId(id: number): Promise<ResponseSchema<City | null>> {
+    const foundCity = fakeCities.filter((c) => c.id === id)
+
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve({
+          status: 'success',
+          data: foundCity?.length ? foundCity[0] : null
+        })
+      }, 300)
+    })
+  }
+
   return {
     searchCityByName,
     mockSearchCityByName,
-    getPopularCities
+    getPopularCities,
+    getDeliveryCostByCityId
   }
 }
